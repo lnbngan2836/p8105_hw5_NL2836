@@ -1,0 +1,31 @@
+---
+title: "p8105_hw5_NL2836"
+author: "Ngan Le"
+date: "2023-11-15"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readr)
+library(rvest)
+library(dplyr)
+library(patchwork)
+```
+
+# Question 1
+
+##### Import dataset from CSV file. 
+
+```{r import homicide data, message = FALSE}
+homicide <- read_csv("homicide-data.csv")
+```
+
+##### Description of dataset:
+
+This dataset includes `r nrow(homicide)` observations and `r ncol(homicide)` variables, reporting the date, the city, the state, the coordinates of the incidence, the victims' name, age, race, gender, and the disposition of the case. The incidences are reported across `r n_distinct(homicide$state)` states from 2007-2017. 
+
+
+
+
