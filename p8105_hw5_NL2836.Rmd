@@ -44,6 +44,41 @@ city_summary =
 
 - From 2007-2017, Chicago had the highest number of total number of homicides and also the highest number of unsolved homicides. Tulsa, AL only had 1 reported case and 0 reported unsolved case, which might have been due to missing reports. If we exclude Tulsa, AL then Tampa, FL had both the lowest number of total homicides and the lowest number of unsolved homicides. 
 
+##### For the city of Baltimore, MD, use the prop.test function to estimate the proportion of homicides that are unsolved; save the output of prop.test as an R object, apply the broom::tidy to this object and pull the estimated proportion and confidence intervals from the resulting tidy dataframe.
+
+```{r}
+baltimore =
+  city_summary %>% 
+  filter(city_state == "Baltimore, MD")
+
+test =
+  prop.test(
+  x= baltimore %>% pull(city_unsolved),
+  n = baltimore %>%pull(city_total))%>% 
+  broom::tidy()
+
+test
+```
+- The estimated proportion of homicides in Baltimore, MD is 64.55% (95% CI: 62.8% -  66.3%).
+
+
+##### Now run prop.test for each of the cities in your dataset, and extract both the proportion of unsolved homicides and the confidence interval for each. Do this within a “tidy” pipeline, making use of purrr::map, purrr::map2, list columns and unnest as necessary to create a tidy dataframe with estimated proportions and CIs for each city.
+
+```{r}
+city_props = 
+  city_summary %>% 
+  mutate(
+    test = map2(.x = city_unsolved, .y = city_total, ~prop.test(x = .x, n = .y)),
+    test = map(test,broom::tidy))%>%
+  unnest() %>%
+  select(city_state, estimate, conf.low, conf.high)%>%
+  arrange(desc(estimate))
+
+city_props
+```
+- Chicago, IL had the highest percentage of unsolved homicides during 2007-2017, which is at 73.6% (95% CI: 72.4% - 74.7%). Excluding Tulsa, AL for the same reason mentioned above, Richmond, VA had the lowest percentage of unsolved homocides during 2007-2017, which is at 26.3% (95% CI: 22.3% - 30.8%)
+
+##### Create a plot that shows the estimates and CIs for each city – check out geom_errorbar for a way to add error bars based on the upper and lower limits. Organize cities according to the proportion of unsolved homicides.
 
 
 
