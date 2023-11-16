@@ -217,11 +217,11 @@ mu_hat_plot =
 power_plot
 ```
 
-- This plot shows how the power of the test (probability of rejecting a false null hypothesis) changes as the true value of μ increases. As the effect size (difference from the null hypothesis) increases, the power should also increase.
+- This plot shows how the power of the test (probability of rejecting a false null hypothesis) changes as the value of true mean increases. As the effect size (difference from the null hypothesis, which states that true means equals 0) increases, the power also increases.
 
 ```{r}
 mu_hat_plot
 ```
 
-- This plot shows the average estimated mu_hate across all tests and for tests where the null was rejected. If the test is unbiased, the sample average of mu_hat for all tests should be approximately equal to the 
+- This plot shows the average estimated mu_hat across all tests (in blue) and for tests where the null was rejected (in red). If the test is unbiased, the sample average of mu_hat for all tests and rejected should be approximately equal.
 
