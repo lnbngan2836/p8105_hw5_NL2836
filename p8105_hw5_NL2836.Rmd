@@ -211,8 +211,17 @@ mu_hat_plot =
   geom_line(aes(x = mu, y = avg_mu_hat_rejected), color = "red") +
   labs(title = "Average Estimate of Mean versus True Mean",
        x = "True Mean", y = "Average Estimate of Mean")
+```
 
+```{r}
 power_plot
+```
+
+- This plot shows how the power of the test (probability of rejecting a false null hypothesis) changes as the true value of μ increases. As the effect size (difference from the null hypothesis) increases, the power should also increase.
+
+```{r}
 mu_hat_plot
 ```
+
+- This plot shows the average estimated mu_hate across all tests and for tests where the null was rejected. If the test is unbiased, the sample average of mu_hat for all tests should be approximately equal to the 
 
