@@ -28,7 +28,7 @@ This dataset includes `r nrow(homicide)` observations and `r ncol(homicide)` var
 
 #####  Create a city_state variable (e.g. “Baltimore, MD”) and then summarize within cities to obtain the total number of homicides and the number of unsolved homicides (those for which the disposition is “Closed without arrest” or “Open/No arrest”).
 
-```{r}
+```{r city summary}
 homicide =
   homicide %>%
   mutate(city_state = str_c(city, ", ", state)) 
@@ -46,7 +46,7 @@ city_summary =
 
 ##### For the city of Baltimore, MD, use the prop.test function to estimate the proportion of homicides that are unsolved; save the output of prop.test as an R object, apply the broom::tidy to this object and pull the estimated proportion and confidence intervals from the resulting tidy dataframe.
 
-```{r}
+```{r baltimore props}
 baltimore =
   city_summary %>% 
   filter(city_state == "Baltimore, MD")
@@ -64,7 +64,7 @@ test
 
 ##### Now run prop.test for each of the cities in your dataset, and extract both the proportion of unsolved homicides and the confidence interval for each. Do this within a “tidy” pipeline, making use of purrr::map, purrr::map2, list columns and unnest as necessary to create a tidy dataframe with estimated proportions and CIs for each city.
 
-```{r}
+```{r city_unsolved props, warning = FALSE}
 city_props = 
   city_summary %>% 
   mutate(
@@ -80,7 +80,23 @@ city_props
 
 ##### Create a plot that shows the estimates and CIs for each city – check out geom_errorbar for a way to add error bars based on the upper and lower limits. Organize cities according to the proportion of unsolved homicides.
 
+Here we will exclude Tulsa, AL from the dataset to keep the plot clear and tidy.
 
+```{r city_unsolved plots, dpi = 500}
+city_props =
+  city_props %>%
+  filter(city_state != "Tulsa, AL")
+
+ggplot(city_props, aes(x = reorder(city_state, estimate), y = estimate)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.7) +
+  coord_flip() +
+  labs(x = "City, State", y = "Proportion of Unsolved Homicides and 95% CI", 
+       title = "Proportion of Unsolved Homicides in Each City and Confidence Intervals") +
+  theme_minimal() +
+  theme(axis.text.y = element_text(size = 6))
+```
+- Chicago, IL's percentage of unsolved homicides seems to be an outlier (by visual assessment) among the cities reported. 
 
 
 
