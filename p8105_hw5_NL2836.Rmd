@@ -22,9 +22,30 @@ library(patchwork)
 homicide <- read_csv("homicide-data.csv")
 ```
 
-##### Description of dataset:
+##### Describe the raw data. 
 
-This dataset includes `r nrow(homicide)` observations and `r ncol(homicide)` variables, reporting the date, the city, the state, the coordinates of the incidence, the victims' name, age, race, gender, and the disposition of the case. The incidences are reported across `r n_distinct(homicide$state)` states from 2007-2017. 
+This dataset includes `r nrow(homicide)` observations and `r ncol(homicide)` variables, reporting the date, the city, the state, the coordinates of the incidences, the victims' name, age, race, gender, and the disposition of the case. The incidences are reported across `r n_distinct(homicide$state)` states from 2007-2017. 
+
+#####  Create a city_state variable (e.g. “Baltimore, MD”) and then summarize within cities to obtain the total number of homicides and the number of unsolved homicides (those for which the disposition is “Closed without arrest” or “Open/No arrest”).
+
+```{r}
+homicide =
+  homicide %>%
+  mutate(city_state = str_c(city, ", ", state)) 
+ 
+city_summary =
+  homicide %>% 
+  group_by(city_state) %>% 
+  summarize(
+    city_total= n(), 
+    city_unsolved= sum(disposition %in% c("Closed without arrest", "Open/No arrest"))
+  )
+```
+
+- From 2007-2017, Chicago had the highest number of total number of homicides and also the highest number of unsolved homicides. Tulsa, AL only had 1 reported case and 0 reported unsolved case, which might have been due to missing reports. If we exclude Tulsa, AL then Tampa, FL had both the lowest number of total homicides and the lowest number of unsolved homicides. 
+
+
+
 
 
 
